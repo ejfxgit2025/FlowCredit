@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>FlowCredit | Revenue-Based Lending</title>
+  <!-- Google Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- External styles & scripts (no inline) -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Web3 and blockchain libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+  <script src="webgl-bg.js" defer></script>
+  <script src="contract.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <!-- Animated background layer -->
+  <div id="animatedBackground" aria-hidden="true"></div>
+
+  <!-- NAVBAR (unchanged) -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="/" aria-label="FlowCredit homepage">FlowCredit</a>
+      </div>
+
+      <!-- Right side actions -->
+      <div class="nav-actions">
+        <button id="themeToggle" class="icon-btn" title="Switch between dark and light theme"
+          aria-label="Toggle theme">🌓</button>
+        <button id="settingsToggle" class="icon-btn" title="Open settings panel" aria-label="Settings">⚙️</button>
+        <button id="connectWallet" class="btn-primary" title="Connect your Web3 wallet">Connect Wallet</button>
+        <!-- Hamburger (mobile only) -->
+        <button id="mobileMenuToggle" class="hamburger" title="Open mobile menu" aria-label="Menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Slide-in mobile menu (unchanged) -->
+    <div id="mobileMenu" class="mobile-menu" aria-label="Mobile navigation">
+      <div class="mobile-menu-header">
+        <button id="closeMobileMenu" class="close-btn" title="Close menu" aria-label="Close">✕</button>
+      </div>
+      <!-- No dashboard/borrow/lend links on landing page -->
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT (only hero and new sections below) -->
+  <main id="mainContent">
+
+    <!-- HERO SECTION (unchanged) -->
+    <section id="hero" class="hero-section">
+      <div class="container">
+        <h1>Revenue-Based Lending Powered by Creditcoin</h1>
+        <p class="subheadline">Unlock non-dilutive capital by sharing a percentage of future revenues — transparent, fair, and on-chain.</p>
+        <div class="hero-cta">
+          <a href="app.html" id="launchApp" class="btn-primary btn-large" title="Launch the FlowCredit dApp">Launch App</a>
+          <a href="learn.html" id="learnMore" class="btn-secondary btn-large" title="Read how revenue-based lending works">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1 – PLATFORM STATS (new) -->
+    <section id="stats" class="stats-section">
+      <div class="container">
+        <h2 class="section-title">FlowCredit Network Activity</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value" id="totalFunded">$18.4M</span>
+            <span class="stat-label">Total Capital Funded</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="activeLoans">142</span>
+            <span class="stat-label">Active Revenue Loans</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="totalVolume">$27.2M</span>
+            <span class="stat-label">Total On-Chain Volume</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="repaymentRate">98.4%</span>
+            <span class="stat-label">Repayment Success Rate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 – HOW FLOWCREDIT WORKS -->
+    <section id="how" class="platform-section">
+      <div class="container">
+        <h2 class="section-title">How Revenue-Based Lending Works</h2>
+        <div class="card-grid">
+          <div class="feature-card">
+            <h3>Step 1 — Borrower Creates Loan Contract</h3>
+            <p>A business deploys a revenue-based loan agreement defining: requested funding, revenue share percentage, repayment cap, loan duration. These terms are encoded into a smart contract.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Step 2 — Lenders Fund the Loan</h3>
+            <p>Investors browse active loan requests and fund them using their Web3 wallet. Funds are locked inside an on-chain escrow contract.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Step 3 — Smart Contract Distributes Revenue</h3>
+            <p>As the borrower generates revenue, payments are submitted on-chain and automatically distributed between lenders according to the revenue share agreement.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 – BLOCKCHAIN ARCHITECTURE -->
+    <section id="architecture" class="platform-section">
+      <div class="container">
+        <h2 class="section-title">FlowCredit Blockchain Architecture</h2>
+        <div class="card-grid" style="grid-template-columns: 1fr;">
+          <div class="feature-card">
+            <p>FlowCredit is built on the Creditcoin network to enable transparent and verifiable lending relationships between borrowers and lenders.</p>
+            <p>The architecture consists of:</p>
+            <ul style="margin-top: 1rem; list-style: none; padding: 0;">
+              <li style="margin-bottom: 0.5rem;">→ Borrower</li>
+              <li style="margin-bottom: 0.5rem;">→ Revenue Loan Smart Contract</li>
+              <li style="margin-bottom: 0.5rem;">→ Escrow Contract</li>
+              <li style="margin-bottom: 0.5rem;">→ Revenue Payment Reports</li>
+              <li style="margin-bottom: 0.5rem;">→ Automatic Distribution to Lenders</li>
+            </ul>
+            <p style="margin-top: 1rem;">All agreements are recorded on-chain and cannot be modified after deployment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 – TECHNOLOGY STACK -->
+    <section id="technology" class="platform-section">
+      <div class="container">
+        <h2 class="section-title">Technology Stack</h2>
+        <div class="card-grid">
+          <div class="feature-card">
+            <h3>Creditcoin Network</h3>
+            <p>Purpose-built Layer-1 blockchain designed for credit markets.</p>
+          </div>
+          <div class="feature-card">
+            <h3>OpenZeppelin v5</h3>
+            <p>Security-audited smart contract libraries.</p>
+          </div>
+          <div class="feature-card">
+            <h3>RevenueLoan Smart Contract</h3>
+            <p>Handles loan creation, funding, and repayment distribution.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Web3 Wallet Integration</h3>
+            <p>Supports MetaMask and compatible wallets.</p>
+          </div>
+          <div class="feature-card">
+            <h3>On-Chain Transparency</h3>
+            <p>All loan terms and payments are publicly verifiable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5 – PLATFORM ADVANTAGES -->
+    <section id="advantages" class="platform-section">
+      <div class="container">
+        <h2 class="section-title">Why FlowCredit</h2>
+        <div class="card-grid">
+          <div class="feature-card">
+            <h3>Non-Dilutive Capital</h3>
+            <p>Businesses raise funding without giving up equity.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Automated Smart Escrow</h3>
+            <p>Funds are held securely in smart contracts.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Global Access</h3>
+            <p>Anyone with a Web3 wallet can participate.</p>
+          </div>
+          <div class="feature-card">
+            <h3>Transparent Lending</h3>
+            <p>Loan performance is publicly verifiable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6 – FINAL CALL TO ACTION -->
+    <section id="cta" class="hero-section" style="padding: 80px 0;">
+      <div class="container">
+        <h2 class="section-title">Start Using FlowCredit</h2>
+        <div class="hero-cta">
+          <a href="app.html" class="btn-primary btn-large">Launch App</a>
+          <a href="learn.html" class="btn-secondary btn-large">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SETTINGS PANEL (unchanged) -->
+  <div id="settingsPanel" class="settings-panel" aria-label="Settings panel">
+    <div class="settings-header">
+      <h3>Settings</h3>
+      <button id="closeSettings" class="close-btn" title="Close settings panel">✕</button>
+    </div>
+    <div class="settings-body">
+      <button id="toggleAnimations" class="settings-option" title="Enable or disable UI animations">Toggle animations</button>
+      <button id="toggleBackgroundEffects" class="settings-option" title="Turn advanced background on/off">Toggle background effects</button>
+      <button id="resetPreferences" class="settings-option" title="Reset all UI preferences to default">Reset UI preferences</button>
+    </div>
+  </div>
+
+  <!-- FOOTER (unchanged) -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built on Creditcoin Testnet — Smart contracts secured with OpenZeppelin v5</p>
+    </div>
+  </footer>
+</body>
+</html>

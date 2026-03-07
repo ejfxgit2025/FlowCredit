@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>FlowCredit | dApp Interface</title>
+  <!-- Google Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- External styles & scripts (no inline) -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:,">
+  <!-- WebGL organic mesh background (dark mode only) -->
+  <!-- use the UMD build so it defines a global `ethers` variable -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+  <script src="webgl-bg.js" defer></script>
+  <script src="contract.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <!-- 1) Advanced animated background layer (handled by CSS) -->
+  <div id="animatedBackground" aria-hidden="true"></div>
+
+  <!-- 2) NAVBAR – fixed, glass effect (exactly as in index.html) -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="/" aria-label="FlowCredit homepage">FlowCredit</a>
+      </div>
+
+      <!-- Desktop navigation (hidden on mobile) -->
+      <nav class="nav-menu desktop-menu">
+        <ul>
+          <li><a href="#dashboard" data-section="dashboard" title="View your lending & borrowing overview">Dashboard</a>
+          </li>
+          <li><a href="#borrow" data-section="borrow" title="Apply for revenue-based financing">Borrow</a></li>
+          <li><a href="#lend" data-section="lend" title="Discover loans to fund">Lend</a></li>
+          <li><a href="#analytics" data-section="analytics" title="Market trends & portfolio insights">Analytics</a>
+          </li>
+          <li><a href="#docs" data-section="docs" title="Read documentation & API">Docs</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right side actions -->
+      <div class="nav-actions">
+        <button id="themeToggle" class="icon-btn" title="Switch between dark and light theme"
+          aria-label="Toggle theme">🌓</button>
+        <button id="settingsToggle" class="icon-btn" title="Open settings panel" aria-label="Settings">⚙️</button>
+        <button id="connectWallet" class="btn-primary" title="Connect your Web3 wallet (e.g., MetaMask)">Connect
+          Wallet</button>
+        <!-- Hamburger (mobile only) -->
+        <button id="mobileMenuToggle" class="hamburger" title="Open mobile menu" aria-label="Menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Slide-in mobile menu (hidden by default) -->
+    <div id="mobileMenu" class="mobile-menu" aria-label="Mobile navigation">
+      <div class="mobile-menu-header">
+        <button id="closeMobileMenu" class="close-btn" title="Close menu" aria-label="Close">✕</button>
+      </div>
+      <ul>
+        <li><a href="#dashboard" data-section="dashboard">Dashboard</a></li>
+        <li><a href="#borrow" data-section="borrow">Borrow</a></li>
+        <li><a href="#lend" data-section="lend">Lend</a></li>
+        <li><a href="#analytics" data-section="analytics">Analytics</a></li>
+        <li><a href="#docs" data-section="docs">Docs</a></li>
+        <li class="mobile-connect"><button id="mobileConnectWallet" class="btn-primary" title="Connect wallet">Connect
+            Wallet</button></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT (with top padding to avoid fixed navbar overlap) -->
+  <main id="mainContent">
+
+    <!-- SECTION 1 – APP HERO (reuse hero-section styling) -->
+    <section class="hero-section">
+      <div class="container">
+        <h1>FlowCredit Application</h1>
+        <p class="subheadline">Create, fund, and manage revenue-based loans on Creditcoin.</p>
+        <div class="hero-cta">
+          <button id="createLoanBtn" class="btn-primary btn-large" title="Start a new loan proposal">Create
+            Loan</button>
+          <button id="browseLoansBtn" class="btn-secondary btn-large" title="Browse active loan listings">Browse
+            Loans</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 – DASHBOARD (stats) with id="dashboard" -->
+    <section id="dashboard" class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Active Loans</span>
+            <span class="stat-value" id="activeLoansApp">12</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Total Funded</span>
+            <span class="stat-value" id="totalFundedApp">$1.2M</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Total Repaid</span>
+            <span class="stat-value" id="totalRepaidApp">$0.8M</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Your Position</span>
+            <span class="stat-value" id="yourPositionApp">$0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 – CREATE LOAN (borrow form) with id="borrow" -->
+    <section id="borrow" class="borrow-section">
+      <div class="container">
+        <h2>Create Loan</h2>
+        <p class="section-description">Define your loan terms. Funds are held in escrow and automatically distributed.
+        </p>
+        <div class="form-card">
+          <!-- no id to avoid interference with existing app.js form handler -->
+          <form id="loanCreateForm" action="#" method="post">
+            <div class="form-group">
+              <label for="requestAmount">Requested Amount ($)</label>
+              <input type="number" id="requestAmount" name="requestAmount" placeholder="e.g., 50000" step="1000"
+                min="1000" required>
+            </div>
+            <div class="form-group">
+              <label for="revenueSharePct">Revenue Share %</label>
+              <input type="number" id="revenueSharePct" name="revenueSharePct" placeholder="e.g., 5.0" step="0.1"
+                min="1" max="30" required>
+            </div>
+            <div class="form-group">
+              <label for="repaymentCap">Repayment Cap ($)</label>
+              <input type="number" id="repaymentCap" name="repaymentCap" placeholder="e.g., 60000" step="1000"
+                min="1000" required>
+            </div>
+            <div class="form-group">
+              <label for="durationMonths">Duration (months)</label>
+              <input type="number" id="durationMonths" name="durationMonths" placeholder="e.g., 12" min="3" max="60"
+                required>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;">Create Loan</button>
+          </form>
+          <p class="form-footnote">✓ Terms will be encoded and submitted to the Creditcoin smart contract.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 – FUND LOANS (marketplace) with id="lend" -->
+    <section id="lend" class="lend-section">
+      <div class="container">
+        <h2>Fund Loans</h2>
+        <p class="section-description">Browse active loan requests and earn yield through revenue share payments.</p>
+        <div id="loanContainer" class="loan-container">
+          <!-- Populated dynamically by modules.LoanSystem from the blockchain -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5 – ANALYTICS (simple stats) with id="analytics" -->
+    <section id="analytics" class="analytics-section">
+      <div class="container">
+        <h2>Analytics</h2>
+        <div class="stats-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom: 2rem;">
+          <div class="stat-card">
+            <span class="stat-label">Total Loans Created</span>
+            <span class="stat-value">47</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Total Capital Deployed</span>
+            <span class="stat-value">$3.8M</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Avg Revenue Share</span>
+            <span class="stat-value">5.6%</span>
+          </div>
+        </div>
+        <p class="analytics-description">Historical data based on on‑chain loan performance.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 6 – DOCS (placeholder) with id="docs" -->
+    <section id="docs" class="platform-section" style="padding: 60px 0;">
+      <div class="container">
+        <h2 class="section-title">Documentation</h2>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+          Comprehensive guides, API references, and smart contract details are available in our docs.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 7 – FOOTER CTA (back to home) -->
+    <section style="padding: 60px 0; text-align: center;">
+      <div class="container">
+        <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+          FlowCredit enables transparent revenue‑based financing powered by smart contracts on Creditcoin.
+        </p>
+        <a href="index.html" class="btn-primary btn-large" style="display: inline-block;">Back to Home</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 9) SETTINGS PANEL (hidden slide panel) – same as index.html -->
+  <div id="settingsPanel" class="settings-panel" aria-label="Settings panel">
+    <div class="settings-header">
+      <h3>Settings</h3>
+      <button id="closeSettings" class="close-btn" title="Close settings panel">✕</button>
+    </div>
+    <div class="settings-body">
+      <button id="toggleAnimations" class="settings-option" title="Enable or disable UI animations">Toggle
+        animations</button>
+      <button id="toggleBackgroundEffects" class="settings-option" title="Turn advanced background on/off">Toggle
+        background effects</button>
+      <button id="resetPreferences" class="settings-option" title="Reset all UI preferences to default">Reset UI
+        preferences</button>
+    </div>
+  </div>
+
+  <!-- 10) FOOTER (exactly as in index.html) -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built on Creditcoin Testnet — Smart contracts secured with OpenZeppelin v5</p>
+    </div>
+  </footer>
+
+  <!-- Additional hidden elements / close buttons for mobile menu are already inside mobileMenu -->
+</body>
+
+</html>
